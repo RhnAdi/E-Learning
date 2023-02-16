@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package User;
+
+option go_package = "/pb";
+
+import "proto/common_message.proto";
+import "proto/user_message.proto";
+
+service UserService {
+    rpc GetUserById(CommonMessage.Id) returns (User.UserResponse);
+    rpc GetUserByEmail(CommonMessage.Email) returns (User.UserResponse);
+    rpc GetAllUser(CommonMessage.Empty) returns (User.ListUserResponse);
+    rpc UpdateUser(User.UpdateUserRequest) returns (User.UserResponse);
+    rpc DeleteUser(CommonMessage.Id) returns (CommonMessage.Id);
+}
+

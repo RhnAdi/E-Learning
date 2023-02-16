@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package User;
+
+option go_package = "/pb";
+
+message UserResponse {
+    string Id = 1;
+    string Username = 2;
+    string Email = 3;
+    string Role = 4;
+    int64 CreatedAt = 5;
+    int64 UpdatedAt = 6;
+}
+
+message CreateUserRequest {
+    string Username = 1;
+    string Email = 2;
+    string Password = 3;
+    string Role = 4;
+}
+
+message ListUserResponse {
+    repeated UserResponse users = 1;
+}
+
+message UpdateUserRequest {
+    string id = 1;
+    string Username = 2;
+}

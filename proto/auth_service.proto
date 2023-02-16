@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package Auth;
+
+import "proto/auth_message.proto";
+
+option go_package = "/pb";
+
+
+service AuthService {
+    rpc Register(Auth.RegisterRequest) returns (Auth.AuthResponse);
+    rpc Login(Auth.LoginRequest) returns (Auth.AuthResponse);
+}

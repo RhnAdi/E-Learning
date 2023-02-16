@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package Classroom;
+
+option go_package = "/pb";
+
+message ClassroomResponse {
+    string Id = 1;
+    string Name = 2;
+    string Description = 3;
+    string TeacherId = 4;
+    int64 CreatedAt = 5;
+    int64 UpdatedAt = 6;
+}
+
+message CreateClassroomRequest {
+    string Name = 1;
+    string Description = 2;
+};
+
+message UpdateClassroomRequest {
+    string Name = 1;
+    string Description = 2;
+};
+
+message ListClassroomResponse {
+    repeated ClassroomResponse AllClassroom = 1;
+}
+
+message AddStudentRequest {
+    string classroom_id = 1;
+    string student_id = 2;
+}
+
+message StudentClassResponse {
+    string Id = 1;
+    string ClassroomId = 2;
+    string StudentId = 3;
+    bool Status = 4;
+    int64 CreatedAt = 5;
+    int64 UpdatedAt = 6;
+}
+
+message DeleteStudentInClassRequest {
+    string classroom_id = 1;
+    string student_id = 2;
+}
+
+message StudentsResponse {
+    repeated string Students = 1;
+}
+
+message JoinClassRequestsResponse {
+    repeated StudentClassResponse Requests = 1;
+}

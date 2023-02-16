@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package CommonMessage;
+
+option go_package = "/pb";
+
+message Empty {}
+
+message Id {
+    string Id = 1;
+}
+
+message Email {
+    string Email = 1;
+}
+
+message Name {
+    string Name = 1;
+}
