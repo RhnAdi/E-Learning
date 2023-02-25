@@ -14,10 +14,11 @@ func (d *ListClassroomResponse) FromProtoBuffer(pb *pb.ListClassroomResponse) {
 	}
 }
 
-func (d *ListClassroomResponse) ToProtoBuffer() (pb pb.ListClassroomResponse) {
+func (d *ListClassroomResponse) ToProtoBuffer() *pb.ListClassroomResponse {
+	pb := new(pb.ListClassroomResponse)
 	for _, user := range d.AllClassroom {
 		temp := user.ToProtoBuffer()
-		pb.AllClassroom = append(pb.AllClassroom, &temp)
+		pb.AllClassroom = append(pb.AllClassroom, temp)
 	}
-	return
+	return pb
 }

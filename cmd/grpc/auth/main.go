@@ -20,7 +20,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Panicln(fmt.Errorf("unable to load env : %w", err))
+		log.Panicln(fmt.Errorf("(auth) unable to load env : %w", err))
 	}
 
 	appHost := os.Getenv("APP_HOST")
@@ -29,15 +29,15 @@ func main() {
 	cfg := db.NewConfig()
 	conn, err := db.NewConnection(cfg)
 	if err != nil {
-		log.Panicln(fmt.Errorf("can't connect to database : %w", err))
+		log.Panicln(fmt.Errorf("(auth) can't connect to database : %w", err))
 	}
 	defer conn.Close()
 	userRepository := repository.NewUserRepository(conn)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userRpc := rpc.NewUserRpc(userUsecase)
-	jwtCfg, err := jwt.NewJWTConfig()
+	jwtCfg, err := jwt.NewJWTConfig("../../../")
 	if err != nil {
-		log.Panicln(fmt.Errorf("unable to create jwt config : %w", err))
+		log.Panicln(fmt.Errorf("(auth) unable to create jwt config : %w", err))
 	}
 	authUsecase := usecase.NewAuthUsecase(&jwtCfg, userRepository)
 	authRpc := rpc.NewAuthRpc(authUsecase)
@@ -45,7 +45,7 @@ func main() {
 	dns := fmt.Sprintf("%s:%s", appHost, appPort)
 	lis, err := net.Listen("tcp", dns)
 	if err != nil {
-		log.Panicln(fmt.Errorf("can't run app on : %s : %w", dns, err))
+		log.Panicln(fmt.Errorf("(auth) can't run app on : %s : %w", dns, err))
 	}
 
 	userServicePath := "/User.UserService/"
@@ -57,8 +57,8 @@ func main() {
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(authInterceptor.Unary()))
 	pb.RegisterUserServiceServer(grpcServer, userRpc)
 	pb.RegisterAuthServiceServer(grpcServer, authRpc)
-	log.Println("GRPC running on : ", dns)
+	log.Println("(auth) service server running on :", dns)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Panicln(fmt.Errorf("server can't running : %w", err))
+		log.Panicln(fmt.Errorf("(auth) server can't running : %w", err))
 	}
 }

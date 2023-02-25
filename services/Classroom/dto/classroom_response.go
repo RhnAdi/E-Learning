@@ -33,14 +33,15 @@ func (d *ClassroomResponse) FromProtoBuffer(req *pb.ClassroomResponse) (err erro
 	return nil
 }
 
-func (d *ClassroomResponse) ToProtoBuffer() (res pb.ClassroomResponse) {
+func (d *ClassroomResponse) ToProtoBuffer() *pb.ClassroomResponse {
+	res := new(pb.ClassroomResponse)
 	res.Id = d.Id.Hex()
 	res.TeacherId = d.TeacherId.Hex()
 	res.Name = d.Name
 	res.Description = d.Description
 	res.CreatedAt = d.CreatedAt.Unix()
 	res.UpdatedAt = d.UpdatedAt.Unix()
-	return
+	return res
 }
 
 func (d *ClassroomResponse) FromModelClassroom(model *models.Classroom) {

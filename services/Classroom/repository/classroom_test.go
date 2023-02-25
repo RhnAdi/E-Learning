@@ -2,8 +2,10 @@ package repository_test
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"testing"
+	"time"
 
 	db "github.com/RhnAdi/elearning-microservice/config/database"
 	"github.com/RhnAdi/elearning-microservice/services/Classroom/models"
@@ -42,7 +44,6 @@ func TestCreateClassroom(t *testing.T) {
 	assert.Equal(t, newClass.TeacherId.Hex(), res.TeacherId.Hex())
 	assert.Equal(t, newClass.Description, res.Description)
 }
-
 func TestGetClassroomById(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -68,7 +69,6 @@ func TestGetClassroomById(t *testing.T) {
 	assert.Equal(t, newClass.TeacherId.Hex(), res.TeacherId.Hex())
 	assert.Equal(t, newClass.Description, res.Description)
 }
-
 func TestGetClassroomByName(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -94,7 +94,6 @@ func TestGetClassroomByName(t *testing.T) {
 	assert.Equal(t, newClass.TeacherId.Hex(), res.TeacherId.Hex())
 	assert.Equal(t, newClass.Description, res.Description)
 }
-
 func TestGetAllClassroom(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -106,7 +105,6 @@ func TestGetAllClassroom(t *testing.T) {
 	_, err = classroomRepo.GetAllClassroom()
 	assert.NoError(t, err)
 }
-
 func TestUpdateClassroom(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -135,7 +133,6 @@ func TestUpdateClassroom(t *testing.T) {
 	assert.Equal(t, class.TeacherId.Hex(), res.TeacherId.Hex())
 	assert.Equal(t, class.Description, res.Description)
 }
-
 func TestDeleteClassroom(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -161,29 +158,6 @@ func TestDeleteClassroom(t *testing.T) {
 	assert.Equal(t, newClass.TeacherId.Hex(), res.TeacherId.Hex())
 	assert.Equal(t, newClass.Description, res.Description)
 }
-
-func TestJoinClass(t *testing.T) {
-	dbcfg := db.NewConfig()
-	conn, err := db.NewConnection(dbcfg)
-	assert.NoError(t, err)
-	defer conn.Close()
-
-	classroomRepo := repository.NewClassroomRepository(conn)
-
-	reqJoin := models.StudentClass{
-		ClassroomId: primitive.NewObjectID(),
-		StudentId:   primitive.NewObjectID(),
-	}
-	reqJoin.Pre()
-
-	res, err := classroomRepo.JoinClass(&reqJoin)
-	assert.NoError(t, err)
-	assert.Equal(t, reqJoin.Id.Hex(), res.Id.Hex())
-	assert.Equal(t, reqJoin.ClassroomId.Hex(), res.ClassroomId.Hex())
-	assert.Equal(t, reqJoin.StudentId.Hex(), res.StudentId.Hex())
-	assert.Equal(t, reqJoin.Status, res.Status)
-}
-
 func TestDeleteStudentInClass(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -198,21 +172,20 @@ func TestDeleteStudentInClass(t *testing.T) {
 	}
 	reqJoin.Pre()
 
-	res, err := classroomRepo.JoinClass(&reqJoin)
+	res, err := classroomRepo.AddStudent(&reqJoin)
 	assert.NoError(t, err)
 	assert.Equal(t, reqJoin.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, reqJoin.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, reqJoin.StudentId.Hex(), res.StudentId.Hex())
 	assert.Equal(t, reqJoin.Status, res.Status)
 
-	delRes, err := classroomRepo.DeleteStudentInClass(res)
+	delRes, err := classroomRepo.DeleteStudent(res)
 	assert.NoError(t, err)
 	assert.Equal(t, delRes.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, delRes.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, delRes.StudentId.Hex(), res.StudentId.Hex())
 	assert.Equal(t, delRes.Status, res.Status)
 }
-
 func TestAddStudent(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -233,7 +206,6 @@ func TestAddStudent(t *testing.T) {
 	assert.Equal(t, studentClass.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, studentClass.StudentId.Hex(), res.StudentId.Hex())
 }
-
 func TestStudents(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -262,7 +234,7 @@ func TestStudents(t *testing.T) {
 		studentAddeds = append(studentAddeds, studentClass)
 	}
 
-	res, err := classroomRepo.Students(classroom_id.Hex())
+	res, err := classroomRepo.GetStudents(classroom_id.Hex())
 	assert.NoError(t, err)
 	for _, sc := range res {
 		for _, sa := range studentAddeds {
@@ -274,7 +246,6 @@ func TestStudents(t *testing.T) {
 		assert.Error(t, errors.New("not matching"))
 	}
 }
-
 func TestJoinRequest(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -304,7 +275,7 @@ func TestJoinRequest(t *testing.T) {
 		studentAddeds = append(studentAddeds, studentClass)
 	}
 
-	res, err := classroomRepo.JoinRequest(classroom_id.Hex())
+	res, err := classroomRepo.GetJoinRequests(classroom_id.Hex())
 	assert.NoError(t, err)
 	for _, sc := range res {
 		for _, sa := range studentAddeds {
@@ -316,7 +287,30 @@ func TestJoinRequest(t *testing.T) {
 		assert.Error(t, errors.New("not matching"))
 	}
 }
+func TestGetJoinRequest(t *testing.T) {
+	dbcfg := db.NewConfig()
+	conn, err := db.NewConnection(dbcfg)
+	assert.NoError(t, err)
+	defer conn.Close()
 
+	classroomRepo := repository.NewClassroomRepository(conn)
+
+	classroom_id := primitive.NewObjectID()
+
+	studentClass := models.StudentClass{
+		ClassroomId: classroom_id,
+		StudentId:   primitive.NewObjectID(),
+		Status:      false,
+	}
+	studentClass.Pre()
+
+	add_res, err := classroomRepo.AddStudent(&studentClass)
+	assert.NoError(t, err)
+	assert.Equal(t, studentClass.Id.Hex(), add_res.Id.Hex())
+	assert.Equal(t, studentClass.ClassroomId.Hex(), add_res.ClassroomId.Hex())
+	assert.Equal(t, studentClass.StudentId.Hex(), add_res.StudentId.Hex())
+	assert.Equal(t, studentClass.Status, add_res.Status)
+}
 func TestUpdateJoinRequest(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -331,7 +325,7 @@ func TestUpdateJoinRequest(t *testing.T) {
 	}
 	reqJoin.Pre()
 
-	res, err := classroomRepo.JoinClass(&reqJoin)
+	res, err := classroomRepo.AddStudent(&reqJoin)
 	assert.NoError(t, err)
 	assert.Equal(t, reqJoin.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, reqJoin.ClassroomId.Hex(), res.ClassroomId.Hex())
@@ -339,14 +333,13 @@ func TestUpdateJoinRequest(t *testing.T) {
 	assert.Equal(t, reqJoin.Status, res.Status)
 
 	reqJoin.Status = true
-	updateRes, err := classroomRepo.UpdateJoinRequest(&reqJoin)
+	updateRes, err := classroomRepo.UpdateStudent(&reqJoin)
 	assert.NoError(t, err)
 	assert.Equal(t, updateRes.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, updateRes.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, updateRes.StudentId.Hex(), res.StudentId.Hex())
 	assert.Equal(t, updateRes.Status, res.Status)
 }
-
 func TestDeleteJoinRequest(t *testing.T) {
 	dbcfg := db.NewConfig()
 	conn, err := db.NewConnection(dbcfg)
@@ -361,18 +354,116 @@ func TestDeleteJoinRequest(t *testing.T) {
 	}
 	reqJoin.Pre()
 
-	res, err := classroomRepo.JoinClass(&reqJoin)
+	res, err := classroomRepo.AddStudent(&reqJoin)
 	assert.NoError(t, err)
 	assert.Equal(t, reqJoin.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, reqJoin.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, reqJoin.StudentId.Hex(), res.StudentId.Hex())
 	assert.Equal(t, reqJoin.Status, res.Status)
 
-	reqJoin.Status = true
-	updateRes, err := classroomRepo.DeleteJoinRequest(&reqJoin)
+	updateRes, err := classroomRepo.DeleteStudent(res)
 	assert.NoError(t, err)
 	assert.Equal(t, updateRes.Id.Hex(), res.Id.Hex())
 	assert.Equal(t, updateRes.ClassroomId.Hex(), res.ClassroomId.Hex())
 	assert.Equal(t, updateRes.StudentId.Hex(), res.StudentId.Hex())
 	assert.Equal(t, updateRes.Status, res.Status)
+}
+func TestGetStudent(t *testing.T) {
+	dbcfg := db.NewConfig()
+	conn, err := db.NewConnection(dbcfg)
+	assert.NoError(t, err)
+	defer conn.Close()
+
+	classroomRepo := repository.NewClassroomRepository(conn)
+
+	reqJoin := models.StudentClass{
+		ClassroomId: primitive.NewObjectID(),
+		StudentId:   primitive.NewObjectID(),
+	}
+	reqJoin.Pre()
+
+	res, err := classroomRepo.AddStudent(&reqJoin)
+	assert.NoError(t, err)
+	assert.Equal(t, reqJoin.Id.Hex(), res.Id.Hex())
+	assert.Equal(t, reqJoin.ClassroomId.Hex(), res.ClassroomId.Hex())
+	assert.Equal(t, reqJoin.StudentId.Hex(), res.StudentId.Hex())
+	assert.Equal(t, reqJoin.Status, res.Status)
+
+	res, err = classroomRepo.GetStudent(res)
+	assert.NoError(t, err)
+	assert.Equal(t, res.Status, reqJoin.Status)
+}
+func TestGetClassroomByTeacherId(t *testing.T) {
+	dbcfg := db.NewConfig()
+	conn, err := db.NewConnection(dbcfg)
+	assert.NoError(t, err)
+	defer conn.Close()
+
+	classroomRepo := repository.NewClassroomRepository(conn)
+	teacherId := primitive.NewObjectID()
+
+	listClass := []*primitive.ObjectID{}
+	for i := 0; i < 5; i++ {
+		class := models.Classroom{
+			Id:          primitive.NewObjectID(),
+			Name:        fmt.Sprintf("Test Class Get Teacher Classroom %d", i),
+			Description: "alsnaklsa aklsdjasjd",
+			TeacherId:   teacherId,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		}
+		res, err := classroomRepo.CreateClassroom(&class)
+		assert.NoError(t, err)
+		listClass = append(listClass, &res.Id)
+	}
+
+	myClass, err := classroomRepo.GetAllClassroomByTeacherId(teacherId.Hex())
+	assert.NoError(t, err)
+
+	for _, class := range myClass {
+		for _, listId := range listClass {
+			if class.Id.Hex() == listId.Hex() {
+				assert.Equal(t, class.Id.Hex(), listId.Hex())
+				continue
+			}
+		}
+		assert.Error(t, errors.New("not match list id"))
+	}
+}
+func TestGetClassroomByStudentId(t *testing.T) {
+	dbcfg := db.NewConfig()
+	conn, err := db.NewConnection(dbcfg)
+	assert.NoError(t, err)
+	defer conn.Close()
+
+	classroomRepo := repository.NewClassroomRepository(conn)
+	studentId := primitive.NewObjectID()
+
+	listClass := []*primitive.ObjectID{}
+	for i := 0; i < 5; i++ {
+		join_class := models.StudentClass{
+			Id:          primitive.NewObjectID(),
+			ClassroomId: primitive.NewObjectID(),
+			StudentId:   studentId,
+			Status:      true,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		}
+		res, err := classroomRepo.AddStudent(&join_class)
+		assert.NoError(t, err)
+		listClass = append(listClass, &res.ClassroomId)
+	}
+
+	myClass, err := classroomRepo.GetAllClassroomByTeacherId(studentId.Hex())
+	assert.NoError(t, err)
+
+	for _, class := range myClass {
+		for _, listId := range listClass {
+			if class.Id.Hex() == listId.Hex() {
+				assert.Equal(t, class.Id.Hex(), listId.Hex())
+				continue
+			}
+		}
+		assert.Error(t, errors.New("not match list id"))
+	}
 }

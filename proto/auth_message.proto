@@ -5,8 +5,8 @@ package Auth;
 option go_package = "/pb";
 
 enum Role {
-    Teacher = 0;
-    Student = 1;
+    teacher = 0;
+    student = 1;
 }
 
 message RegisterRequest {

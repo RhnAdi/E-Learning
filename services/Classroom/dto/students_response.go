@@ -20,9 +20,10 @@ func (d *StudentsResponse) FromProtoBuffer(pb *pb.StudentsResponse) (err error) 
 	return nil
 }
 
-func (d *StudentsResponse) ToProtoBuffer() (pb pb.StudentsResponse) {
+func (d *StudentsResponse) ToProtoBuffer() *pb.StudentsResponse {
+	pb := new(pb.StudentsResponse)
 	for _, tmp_d := range d.Students {
 		pb.Students = append(pb.Students, tmp_d.Hex())
 	}
-	return
+	return pb
 }

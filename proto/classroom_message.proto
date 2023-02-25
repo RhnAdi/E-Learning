@@ -19,8 +19,9 @@ message CreateClassroomRequest {
 };
 
 message UpdateClassroomRequest {
-    string Name = 1;
-    string Description = 2;
+    string Id = 1;
+    string Name = 2;
+    string Description = 3;
 };
 
 message ListClassroomResponse {

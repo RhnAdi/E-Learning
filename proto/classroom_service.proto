@@ -8,16 +8,24 @@ import "proto/classroom_message.proto";
 import "proto/common_message.proto";
 
 service ClassroomService {
-    rpc CreateClassroom(Classroom.CreateClassroomRequest) returns (Classroom.ClassroomResponse);
-    rpc GetClassroomById(CommonMessage.Id) returns (Classroom.ClassroomResponse);
-    rpc GetClassroomByName(CommonMessage.Name) returns (Classroom.ClassroomResponse);
-    rpc UpdateClassroom(Classroom.UpdateClassroomRequest) returns (Classroom.ClassroomResponse);
-    rpc DeleteClassroom(CommonMessage.Id) returns (CommonMessage.Id);
-    rpc JoinClass(CommonMessage.Id) returns (Classroom.StudentClassResponse);
-    rpc AddStudent(Classroom.AddStudentRequest) returns (Classroom.StudentClassResponse);
-    rpc DeleteStudentInClass(Classroom.DeleteStudentInClassRequest) returns (Classroom.StudentClassResponse);
-    rpc Students(CommonMessage.Id) returns (Classroom.StudentsResponse);
-    rpc JoinRequest(CommonMessage.Id) returns (Classroom.JoinClassRequestsResponse);
-    rpc UpdateJoinRequest(CommonMessage.Id) returns (Classroom.StudentClassResponse);
-    rpc DeleteJoinRequest(CommonMessage.Id) returns (Classroom.StudentClassResponse);
+    // For Teacher
+    rpc CreateClassroom(Classroom.CreateClassroomRequest) returns (Classroom.ClassroomResponse); // Finish
+    rpc UpdateClassroom(Classroom.UpdateClassroomRequest) returns (Classroom.ClassroomResponse); // Finish
+    rpc DeleteClassroom(CommonMessage.Id) returns (Classroom.ClassroomResponse); // Finish
+    rpc GetAllJoinRequest(CommonMessage.Id) returns (Classroom.JoinClassRequestsResponse); // Finish
+    rpc AcceptJoinRequest(CommonMessage.Id) returns (Classroom.StudentClassResponse); // Finish
+    rpc RejectJoinRequest(CommonMessage.Id) returns (Classroom.StudentClassResponse); // Finish
+
+    // For Student
+    rpc JoinClass(CommonMessage.Id) returns (Classroom.StudentClassResponse); // Finish
+    
+    // For Teacher & Student
+    rpc MyClass(CommonMessage.Empty) returns (Classroom.ListClassroomResponse); // Finish
+    rpc GetStudentInfo(CommonMessage.Id) returns (Classroom.StudentClassResponse); // Finish
+    
+    // For All
+    rpc GetAllClassroom(CommonMessage.Empty) returns (Classroom.ListClassroomResponse); // Finish
+    rpc GetClassroomById(CommonMessage.Id) returns (Classroom.ClassroomResponse); // Finish
+    rpc GetClassroomByName(CommonMessage.Name) returns (Classroom.ClassroomResponse); // Finish
+    rpc GetAllStudents(CommonMessage.Id) returns (Classroom.StudentsResponse); // Finish
 }

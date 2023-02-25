@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package Assignment;
+
+option go_package = "../pb";
+
+enum AssignmentStatus {
+    unfinished = 0;
+    finished = 1;
+    late = 2;
+};
+
+message AssignmentResponse {
+    string Id = 1;
+    string ClassroomId = 2;
+    string Description = 3;
+    repeated string Files = 4;
+    int64 Deadline = 5;
+    int64 CreatedAt = 6;
+    int64 UpdatedAt = 7;
+}
+
+message CreateAssignmentRequest {
+    string ClassroomId = 1;
+    string Description = 2;
+    repeated string Files = 3;
+    int64 Deadline = 4;
+}
+
+message UpdateAssignmentRequest {
+    string Id = 1;
+    string Description = 2;
+    repeated string Files = 3;
+    int64 Deadline = 4; 
+}
+
+message StudentAssignmentResponse {
+    string Id = 1;
+    repeated string Files = 2;
+    AssignmentStatus Status = 3;
+    int64 Point = 4;
+    int64 CreatedAt = 5;
+    int64 UpdatedAt = 6;
+}
+
+message UpdateStudentAssignmentRequest {
+    string Id = 1;
+    repeated string Files = 2;
+}

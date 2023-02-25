@@ -22,18 +22,23 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClassroomServiceClient interface {
+	// For Teacher
 	CreateClassroom(ctx context.Context, in *CreateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error)
+	UpdateClassroom(ctx context.Context, in *UpdateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error)
+	DeleteClassroom(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ClassroomResponse, error)
+	GetAllJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*JoinClassRequestsResponse, error)
+	AcceptJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
+	RejectJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
+	// For Student
+	JoinClass(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
+	// For Teacher & Student
+	MyClass(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListClassroomResponse, error)
+	GetStudentInfo(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
+	// For All
+	GetAllClassroom(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListClassroomResponse, error)
 	GetClassroomById(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ClassroomResponse, error)
 	GetClassroomByName(ctx context.Context, in *Name, opts ...grpc.CallOption) (*ClassroomResponse, error)
-	UpdateClassroom(ctx context.Context, in *UpdateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error)
-	DeleteClassroom(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Id, error)
-	JoinClass(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
-	AddStudent(ctx context.Context, in *AddStudentRequest, opts ...grpc.CallOption) (*StudentClassResponse, error)
-	DeleteStudentInClass(ctx context.Context, in *DeleteStudentInClassRequest, opts ...grpc.CallOption) (*StudentClassResponse, error)
-	Students(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentsResponse, error)
-	JoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*JoinClassRequestsResponse, error)
-	UpdateJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
-	DeleteJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error)
+	GetAllStudents(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentsResponse, error)
 }
 
 type classroomServiceClient struct {
@@ -47,6 +52,87 @@ func NewClassroomServiceClient(cc grpc.ClientConnInterface) ClassroomServiceClie
 func (c *classroomServiceClient) CreateClassroom(ctx context.Context, in *CreateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error) {
 	out := new(ClassroomResponse)
 	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/CreateClassroom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) UpdateClassroom(ctx context.Context, in *UpdateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error) {
+	out := new(ClassroomResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/UpdateClassroom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) DeleteClassroom(ctx context.Context, in *Id, opts ...grpc.CallOption) (*ClassroomResponse, error) {
+	out := new(ClassroomResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/DeleteClassroom", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) GetAllJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*JoinClassRequestsResponse, error) {
+	out := new(JoinClassRequestsResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/GetAllJoinRequest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) AcceptJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
+	out := new(StudentClassResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/AcceptJoinRequest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) RejectJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
+	out := new(StudentClassResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/RejectJoinRequest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) JoinClass(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
+	out := new(StudentClassResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/JoinClass", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) MyClass(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListClassroomResponse, error) {
+	out := new(ListClassroomResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/MyClass", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) GetStudentInfo(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
+	out := new(StudentClassResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/GetStudentInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *classroomServiceClient) GetAllClassroom(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListClassroomResponse, error) {
+	out := new(ListClassroomResponse)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/GetAllClassroom", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,81 +157,9 @@ func (c *classroomServiceClient) GetClassroomByName(ctx context.Context, in *Nam
 	return out, nil
 }
 
-func (c *classroomServiceClient) UpdateClassroom(ctx context.Context, in *UpdateClassroomRequest, opts ...grpc.CallOption) (*ClassroomResponse, error) {
-	out := new(ClassroomResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/UpdateClassroom", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) DeleteClassroom(ctx context.Context, in *Id, opts ...grpc.CallOption) (*Id, error) {
-	out := new(Id)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/DeleteClassroom", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) JoinClass(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
-	out := new(StudentClassResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/JoinClass", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) AddStudent(ctx context.Context, in *AddStudentRequest, opts ...grpc.CallOption) (*StudentClassResponse, error) {
-	out := new(StudentClassResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/AddStudent", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) DeleteStudentInClass(ctx context.Context, in *DeleteStudentInClassRequest, opts ...grpc.CallOption) (*StudentClassResponse, error) {
-	out := new(StudentClassResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/DeleteStudentInClass", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) Students(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentsResponse, error) {
+func (c *classroomServiceClient) GetAllStudents(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentsResponse, error) {
 	out := new(StudentsResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/Students", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) JoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*JoinClassRequestsResponse, error) {
-	out := new(JoinClassRequestsResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/JoinRequest", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) UpdateJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
-	out := new(StudentClassResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/UpdateJoinRequest", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *classroomServiceClient) DeleteJoinRequest(ctx context.Context, in *Id, opts ...grpc.CallOption) (*StudentClassResponse, error) {
-	out := new(StudentClassResponse)
-	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/DeleteJoinRequest", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Classroom.ClassroomService/GetAllStudents", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,18 +170,23 @@ func (c *classroomServiceClient) DeleteJoinRequest(ctx context.Context, in *Id, 
 // All implementations must embed UnimplementedClassroomServiceServer
 // for forward compatibility
 type ClassroomServiceServer interface {
+	// For Teacher
 	CreateClassroom(context.Context, *CreateClassroomRequest) (*ClassroomResponse, error)
+	UpdateClassroom(context.Context, *UpdateClassroomRequest) (*ClassroomResponse, error)
+	DeleteClassroom(context.Context, *Id) (*ClassroomResponse, error)
+	GetAllJoinRequest(context.Context, *Id) (*JoinClassRequestsResponse, error)
+	AcceptJoinRequest(context.Context, *Id) (*StudentClassResponse, error)
+	RejectJoinRequest(context.Context, *Id) (*StudentClassResponse, error)
+	// For Student
+	JoinClass(context.Context, *Id) (*StudentClassResponse, error)
+	// For Teacher & Student
+	MyClass(context.Context, *Empty) (*ListClassroomResponse, error)
+	GetStudentInfo(context.Context, *Id) (*StudentClassResponse, error)
+	// For All
+	GetAllClassroom(context.Context, *Empty) (*ListClassroomResponse, error)
 	GetClassroomById(context.Context, *Id) (*ClassroomResponse, error)
 	GetClassroomByName(context.Context, *Name) (*ClassroomResponse, error)
-	UpdateClassroom(context.Context, *UpdateClassroomRequest) (*ClassroomResponse, error)
-	DeleteClassroom(context.Context, *Id) (*Id, error)
-	JoinClass(context.Context, *Id) (*StudentClassResponse, error)
-	AddStudent(context.Context, *AddStudentRequest) (*StudentClassResponse, error)
-	DeleteStudentInClass(context.Context, *DeleteStudentInClassRequest) (*StudentClassResponse, error)
-	Students(context.Context, *Id) (*StudentsResponse, error)
-	JoinRequest(context.Context, *Id) (*JoinClassRequestsResponse, error)
-	UpdateJoinRequest(context.Context, *Id) (*StudentClassResponse, error)
-	DeleteJoinRequest(context.Context, *Id) (*StudentClassResponse, error)
+	GetAllStudents(context.Context, *Id) (*StudentsResponse, error)
 	mustEmbedUnimplementedClassroomServiceServer()
 }
 
@@ -178,38 +197,41 @@ type UnimplementedClassroomServiceServer struct {
 func (UnimplementedClassroomServiceServer) CreateClassroom(context.Context, *CreateClassroomRequest) (*ClassroomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateClassroom not implemented")
 }
+func (UnimplementedClassroomServiceServer) UpdateClassroom(context.Context, *UpdateClassroomRequest) (*ClassroomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateClassroom not implemented")
+}
+func (UnimplementedClassroomServiceServer) DeleteClassroom(context.Context, *Id) (*ClassroomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteClassroom not implemented")
+}
+func (UnimplementedClassroomServiceServer) GetAllJoinRequest(context.Context, *Id) (*JoinClassRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllJoinRequest not implemented")
+}
+func (UnimplementedClassroomServiceServer) AcceptJoinRequest(context.Context, *Id) (*StudentClassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptJoinRequest not implemented")
+}
+func (UnimplementedClassroomServiceServer) RejectJoinRequest(context.Context, *Id) (*StudentClassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RejectJoinRequest not implemented")
+}
+func (UnimplementedClassroomServiceServer) JoinClass(context.Context, *Id) (*StudentClassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinClass not implemented")
+}
+func (UnimplementedClassroomServiceServer) MyClass(context.Context, *Empty) (*ListClassroomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MyClass not implemented")
+}
+func (UnimplementedClassroomServiceServer) GetStudentInfo(context.Context, *Id) (*StudentClassResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStudentInfo not implemented")
+}
+func (UnimplementedClassroomServiceServer) GetAllClassroom(context.Context, *Empty) (*ListClassroomResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllClassroom not implemented")
+}
 func (UnimplementedClassroomServiceServer) GetClassroomById(context.Context, *Id) (*ClassroomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClassroomById not implemented")
 }
 func (UnimplementedClassroomServiceServer) GetClassroomByName(context.Context, *Name) (*ClassroomResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClassroomByName not implemented")
 }
-func (UnimplementedClassroomServiceServer) UpdateClassroom(context.Context, *UpdateClassroomRequest) (*ClassroomResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateClassroom not implemented")
-}
-func (UnimplementedClassroomServiceServer) DeleteClassroom(context.Context, *Id) (*Id, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteClassroom not implemented")
-}
-func (UnimplementedClassroomServiceServer) JoinClass(context.Context, *Id) (*StudentClassResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method JoinClass not implemented")
-}
-func (UnimplementedClassroomServiceServer) AddStudent(context.Context, *AddStudentRequest) (*StudentClassResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddStudent not implemented")
-}
-func (UnimplementedClassroomServiceServer) DeleteStudentInClass(context.Context, *DeleteStudentInClassRequest) (*StudentClassResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteStudentInClass not implemented")
-}
-func (UnimplementedClassroomServiceServer) Students(context.Context, *Id) (*StudentsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Students not implemented")
-}
-func (UnimplementedClassroomServiceServer) JoinRequest(context.Context, *Id) (*JoinClassRequestsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method JoinRequest not implemented")
-}
-func (UnimplementedClassroomServiceServer) UpdateJoinRequest(context.Context, *Id) (*StudentClassResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateJoinRequest not implemented")
-}
-func (UnimplementedClassroomServiceServer) DeleteJoinRequest(context.Context, *Id) (*StudentClassResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteJoinRequest not implemented")
+func (UnimplementedClassroomServiceServer) GetAllStudents(context.Context, *Id) (*StudentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllStudents not implemented")
 }
 func (UnimplementedClassroomServiceServer) mustEmbedUnimplementedClassroomServiceServer() {}
 
@@ -238,42 +260,6 @@ func _ClassroomService_CreateClassroom_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClassroomServiceServer).CreateClassroom(ctx, req.(*CreateClassroomRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ClassroomService_GetClassroomById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClassroomServiceServer).GetClassroomById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/GetClassroomById",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).GetClassroomById(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ClassroomService_GetClassroomByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Name)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClassroomServiceServer).GetClassroomByName(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/GetClassroomByName",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).GetClassroomByName(ctx, req.(*Name))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -314,6 +300,60 @@ func _ClassroomService_DeleteClassroom_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClassroomService_GetAllJoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).GetAllJoinRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Classroom.ClassroomService/GetAllJoinRequest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).GetAllJoinRequest(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassroomService_AcceptJoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).AcceptJoinRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Classroom.ClassroomService/AcceptJoinRequest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).AcceptJoinRequest(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassroomService_RejectJoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Id)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).RejectJoinRequest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Classroom.ClassroomService/RejectJoinRequest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).RejectJoinRequest(ctx, req.(*Id))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ClassroomService_JoinClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Id)
 	if err := dec(in); err != nil {
@@ -332,110 +372,110 @@ func _ClassroomService_JoinClass_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClassroomService_AddStudent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddStudentRequest)
+func _ClassroomService_MyClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClassroomServiceServer).AddStudent(ctx, in)
+		return srv.(ClassroomServiceServer).MyClass(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/AddStudent",
+		FullMethod: "/Classroom.ClassroomService/MyClass",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).AddStudent(ctx, req.(*AddStudentRequest))
+		return srv.(ClassroomServiceServer).MyClass(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClassroomService_DeleteStudentInClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteStudentInClassRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClassroomServiceServer).DeleteStudentInClass(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/DeleteStudentInClass",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).DeleteStudentInClass(ctx, req.(*DeleteStudentInClassRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ClassroomService_Students_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ClassroomService_GetStudentInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClassroomServiceServer).Students(ctx, in)
+		return srv.(ClassroomServiceServer).GetStudentInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/Students",
+		FullMethod: "/Classroom.ClassroomService/GetStudentInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).Students(ctx, req.(*Id))
+		return srv.(ClassroomServiceServer).GetStudentInfo(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClassroomService_JoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ClassroomService_GetAllClassroom_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).GetAllClassroom(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Classroom.ClassroomService/GetAllClassroom",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).GetAllClassroom(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassroomService_GetClassroomById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClassroomServiceServer).JoinRequest(ctx, in)
+		return srv.(ClassroomServiceServer).GetClassroomById(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/JoinRequest",
+		FullMethod: "/Classroom.ClassroomService/GetClassroomById",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).JoinRequest(ctx, req.(*Id))
+		return srv.(ClassroomServiceServer).GetClassroomById(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClassroomService_UpdateJoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _ClassroomService_GetClassroomByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Name)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClassroomServiceServer).GetClassroomByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Classroom.ClassroomService/GetClassroomByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClassroomServiceServer).GetClassroomByName(ctx, req.(*Name))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClassroomService_GetAllStudents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Id)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClassroomServiceServer).UpdateJoinRequest(ctx, in)
+		return srv.(ClassroomServiceServer).GetAllStudents(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/UpdateJoinRequest",
+		FullMethod: "/Classroom.ClassroomService/GetAllStudents",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).UpdateJoinRequest(ctx, req.(*Id))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ClassroomService_DeleteJoinRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ClassroomServiceServer).DeleteJoinRequest(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Classroom.ClassroomService/DeleteJoinRequest",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClassroomServiceServer).DeleteJoinRequest(ctx, req.(*Id))
+		return srv.(ClassroomServiceServer).GetAllStudents(ctx, req.(*Id))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -452,14 +492,6 @@ var ClassroomService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ClassroomService_CreateClassroom_Handler,
 		},
 		{
-			MethodName: "GetClassroomById",
-			Handler:    _ClassroomService_GetClassroomById_Handler,
-		},
-		{
-			MethodName: "GetClassroomByName",
-			Handler:    _ClassroomService_GetClassroomByName_Handler,
-		},
-		{
 			MethodName: "UpdateClassroom",
 			Handler:    _ClassroomService_UpdateClassroom_Handler,
 		},
@@ -468,32 +500,44 @@ var ClassroomService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ClassroomService_DeleteClassroom_Handler,
 		},
 		{
+			MethodName: "GetAllJoinRequest",
+			Handler:    _ClassroomService_GetAllJoinRequest_Handler,
+		},
+		{
+			MethodName: "AcceptJoinRequest",
+			Handler:    _ClassroomService_AcceptJoinRequest_Handler,
+		},
+		{
+			MethodName: "RejectJoinRequest",
+			Handler:    _ClassroomService_RejectJoinRequest_Handler,
+		},
+		{
 			MethodName: "JoinClass",
 			Handler:    _ClassroomService_JoinClass_Handler,
 		},
 		{
-			MethodName: "AddStudent",
-			Handler:    _ClassroomService_AddStudent_Handler,
+			MethodName: "MyClass",
+			Handler:    _ClassroomService_MyClass_Handler,
 		},
 		{
-			MethodName: "DeleteStudentInClass",
-			Handler:    _ClassroomService_DeleteStudentInClass_Handler,
+			MethodName: "GetStudentInfo",
+			Handler:    _ClassroomService_GetStudentInfo_Handler,
 		},
 		{
-			MethodName: "Students",
-			Handler:    _ClassroomService_Students_Handler,
+			MethodName: "GetAllClassroom",
+			Handler:    _ClassroomService_GetAllClassroom_Handler,
 		},
 		{
-			MethodName: "JoinRequest",
-			Handler:    _ClassroomService_JoinRequest_Handler,
+			MethodName: "GetClassroomById",
+			Handler:    _ClassroomService_GetClassroomById_Handler,
 		},
 		{
-			MethodName: "UpdateJoinRequest",
-			Handler:    _ClassroomService_UpdateJoinRequest_Handler,
+			MethodName: "GetClassroomByName",
+			Handler:    _ClassroomService_GetClassroomByName_Handler,
 		},
 		{
-			MethodName: "DeleteJoinRequest",
-			Handler:    _ClassroomService_DeleteJoinRequest_Handler,
+			MethodName: "GetAllStudents",
+			Handler:    _ClassroomService_GetAllStudents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

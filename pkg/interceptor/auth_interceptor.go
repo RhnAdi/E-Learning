@@ -69,7 +69,11 @@ func (i *authInterceptor) authorize(ctx context.Context, method string) (context
 	claims := sub.(map[string]interface{})
 	for _, role := range accessibleRole {
 		if role == claims["Role"] {
-			ctx = context.WithValue(ctx, CtxKey("claim"), sub)
+			jwtclaim := jwt.JWTClaims{
+				Id:   claims["Id"].(string),
+				Role: claims["Role"].(string),
+			}
+			ctx = context.WithValue(ctx, CtxKey("claim"), jwtclaim)
 			return ctx, nil
 		}
 	}

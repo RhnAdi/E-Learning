@@ -22,7 +22,7 @@ func init() {
 
 func TestRegisterUserUsecase(t *testing.T) {
 	dbcfg := db.NewConfig()
-	authcfg, err := jwt.NewJWTConfig()
+	authcfg, err := jwt.NewJWTConfig("../../../")
 	assert.NoError(t, err)
 
 	conn, err := db.NewConnection(dbcfg)
@@ -45,7 +45,7 @@ func TestRegisterUserUsecase(t *testing.T) {
 
 func TestLoginUserUsecase(t *testing.T) {
 	dbcfg := db.NewConfig()
-	authcfg, err := jwt.NewJWTConfig()
+	authcfg, err := jwt.NewJWTConfig("../../../")
 	assert.NoError(t, err)
 
 	conn, err := db.NewConnection(dbcfg)

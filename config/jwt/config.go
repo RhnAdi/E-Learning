@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -22,20 +23,20 @@ type JWTConfig struct {
 	RefreshTokenExpiresIn  time.Duration
 }
 
-func NewJWTConfig() (cfg JWTConfig, err error) {
-	cfg.AccessTokenPrivateKey, err = os.ReadFile("../../../access_private_key.pub")
+func NewJWTConfig(rootPath string) (cfg JWTConfig, err error) {
+	cfg.AccessTokenPrivateKey, err = os.ReadFile(fmt.Sprintf("%saccess_private_key.pub", rootPath))
 	if err != nil {
 		return
 	}
-	cfg.AccessTokenPublicKey, err = os.ReadFile("../../../access_public_key.pub")
+	cfg.AccessTokenPublicKey, err = os.ReadFile(fmt.Sprintf("%saccess_public_key.pub", rootPath))
 	if err != nil {
 		return
 	}
-	cfg.RefreshTokenPrivateKey, err = os.ReadFile("../../../refresh_private_key.pub")
+	cfg.RefreshTokenPrivateKey, err = os.ReadFile(fmt.Sprintf("%srefresh_private_key.pub", rootPath))
 	if err != nil {
 		return
 	}
-	cfg.RefreshTokenPublicKey, err = os.ReadFile("../../../refresh_public_key.pub")
+	cfg.RefreshTokenPublicKey, err = os.ReadFile(fmt.Sprintf("%srefresh_public_key.pub", rootPath))
 	if err != nil {
 		return
 	}

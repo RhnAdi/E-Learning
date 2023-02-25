@@ -36,21 +36,22 @@ func (d *StudentClassResponse) FromProtoBuffer(pb *pb.StudentClassResponse) (err
 	return nil
 }
 
-func (d *StudentClassResponse) ToProtoBuffer() (pb pb.StudentClassResponse) {
+func (d *StudentClassResponse) ToProtoBuffer() *pb.StudentClassResponse {
+	pb := new(pb.StudentClassResponse)
 	pb.Id = d.Id.Hex()
 	pb.ClassroomId = d.ClassroomId.Hex()
 	pb.StudentId = d.StudentId.Hex()
 	pb.Status = d.Status
 	pb.CreatedAt = d.CreatedAt.Unix()
 	pb.UpdatedAt = d.UpdatedAt.Unix()
-	return
+	return pb
 }
 
-func (d *StudentClassResponse) FromStudentClassModel(req *models.StudentClass) {
-	d.Id = req.Id
-	d.ClassroomId = req.ClassroomId
-	d.StudentId = req.StudentId
-	d.Status = req.Status
-	d.CreatedAt = req.CreatedAt
-	d.UpdatedAt = req.UpdatedAt
+func (d *StudentClassResponse) FromStudentClassModel(model *models.StudentClass) {
+	d.Id = model.Id
+	d.ClassroomId = model.ClassroomId
+	d.StudentId = model.StudentId
+	d.Status = model.Status
+	d.CreatedAt = model.CreatedAt
+	d.UpdatedAt = model.UpdatedAt
 }

@@ -14,10 +14,11 @@ func (d *JoinRequestResponse) FromProtoBuffer(pb *pb.JoinClassRequestsResponse) 
 	}
 }
 
-func (d *JoinRequestResponse) ToProtoBuffer() (pb pb.JoinClassRequestsResponse) {
+func (d *JoinRequestResponse) ToProtoBuffer() *pb.JoinClassRequestsResponse {
+	pb := new(pb.JoinClassRequestsResponse)
 	for _, temp_d := range d.Requests {
 		temp := temp_d.ToProtoBuffer()
-		pb.Requests = append(pb.Requests, &temp)
+		pb.Requests = append(pb.Requests, temp)
 	}
-	return
+	return pb
 }
